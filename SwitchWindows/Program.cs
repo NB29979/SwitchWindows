@@ -12,13 +12,10 @@ namespace SwitchWindows
         static void Main(string[] args)
         {
             List<String> visibleWindows = Win32Api.GetVisibleWindows().Distinct().ToList();
-            foreach (var e in visibleWindows)
-            {
-                Console.WriteLine(e);
-            }
 
             Client client = new Client();
-            //client.send();
+            client.Encode(visibleWindows);
+            client.Send();
         }
     }
 }
