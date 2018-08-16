@@ -14,8 +14,7 @@ namespace SwitchWindows
         public void Encode(List<String> _visibleWindows)
         {
             // 改行コードで区切り文字にする
-            strVisibleWindows = string.Join("\r\n", _visibleWindows.ToArray());
-            Console.WriteLine(strVisibleWindows);
+            strVisibleWindows = string.Join(",", _visibleWindows.ToArray());
         }
         public void Send()
         {
@@ -32,7 +31,7 @@ namespace SwitchWindows
                 {
                     sender.Connect(remoteEP);
                     Console.WriteLine("Socket connected to {0}", sender.RemoteEndPoint.ToString());
-                    byte[] msg = Encoding.ASCII.GetBytes(strVisibleWindows);
+                    byte[] msg = Encoding.UTF8.GetBytes(strVisibleWindows);
 
                     int bytesSent = sender.Send(msg);
 
