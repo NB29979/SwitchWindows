@@ -11,29 +11,21 @@ namespace SwitchWindows
     {
         static void Main(string[] args)
         {
-            List<string> oldVisibleWindows = new List<string>();
-            List<string> newVisibleWindows = new List<string>();
             Client client = new Client();
+            Server server = new Server();
 
-            Console.WriteLine("Window watching...");
-            while (true)
+            try
             {
-                newVisibleWindows = Win32Api.GetVisibleWindows().Distinct().ToList();
-
-                // 新しくウインドウが開かれた場合と
-                // 既存のウインドウが閉じられた場合にウインドウ一覧を送る
-                if (newVisibleWindows.Except(oldVisibleWindows).ToList().Count != 0 ||
-                    oldVisibleWindows.Except(newVisibleWindows).ToList().Count != 0)
-                {
-                    Console.WriteLine("Changed");
-
-                    client.Encode(newVisibleWindows);
-                    client.SendDataAsync().Wait();
-                   
-                    Console.WriteLine("WindowList was sent to device");
-                    oldVisibleWindows = newVisibleWindows;
-                }
+                Task.WaitAll(
+                    server.InProcessAsync(),
+                    client.InProgressAsync()
+                );
             }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
         }
         static void Debug(List<String> _list)
         {
