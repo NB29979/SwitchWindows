@@ -5,56 +5,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace SwitchWindows
 {
     class Client
     {
         private string strVisibleWindows;
+        private static IPAddress iPAddress;
+
         public void Encode(List<String> _visibleWindows)
         {
-            // 改行コードで区切り文字にする
+            // カンマを区切り文字にしてリストを文字列に変換
             strVisibleWindows = string.Join(",", _visibleWindows.ToArray());
         }
-        public void Send()
+        public async Task SendDataAsync()
         {
-            byte[] bytes = new byte[1024];
-
             try
             {
-                IPAddress iPAddress = IPAddress.Parse("192.168.1.16");
-                IPEndPoint remoteEP = new IPEndPoint(iPAddress, 10080);
+                TcpClient sender = new TcpClient();
+                iPAddress = IPAddress.Parse("192.168.1.16");
+                await sender.ConnectAsync(iPAddress, 10080);
 
-                Socket sender = new Socket(iPAddress.AddressFamily,SocketType.Stream, ProtocolType.Tcp);
+                NetworkStream networkStream_ = sender.GetStream();
+                StreamWriter writer_ = new StreamWriter(networkStream_);
+                writer_.AutoFlush = true;
+                await writer_.WriteLineAsync(strVisibleWindows);
 
-                try
-                {
-                    sender.Connect(remoteEP);
-                    Console.WriteLine("Socket connected to {0}", sender.RemoteEndPoint.ToString());
-                    byte[] msg = Encoding.UTF8.GetBytes(strVisibleWindows);
-
-                    int bytesSent = sender.Send(msg);
-
-                    sender.Shutdown(SocketShutdown.Both);
-                    sender.Close();
-                }
-                catch(ArgumentNullException ane)
-                {
-                    Console.WriteLine("Argument Null Exception : {0}", ane.ToString());
-                }
-                catch(SocketException se)
-                {
-                    Console.WriteLine("SocketException : {0}", se.ToString());
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine("Unexcepted exception : {0}", e.ToString());
-                }
+                sender.Close();
             }
             catch(Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
-        }
+        } 
     }
 }

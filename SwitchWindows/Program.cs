@@ -20,15 +20,17 @@ namespace SwitchWindows
             {
                 newVisibleWindows = Win32Api.GetVisibleWindows().Distinct().ToList();
 
-                // 新しくウインドウが開かれた場合と既存のウインドウが閉じられた場合
+                // 新しくウインドウが開かれた場合と
+                // 既存のウインドウが閉じられた場合にウインドウ一覧を送る
                 if (newVisibleWindows.Except(oldVisibleWindows).ToList().Count != 0 ||
                     oldVisibleWindows.Except(newVisibleWindows).ToList().Count != 0)
                 {
                     Console.WriteLine("Changed");
 
                     client.Encode(newVisibleWindows);
-                    client.Send();
-                    Console.WriteLine("Windows status sent");
+                    client.SendDataAsync().Wait();
+                   
+                    Console.WriteLine("WindowList was sent to device");
                     oldVisibleWindows = newVisibleWindows;
                 }
             }
