@@ -45,6 +45,7 @@ namespace SwitchWindows
         }
         public static List<String> GetVisibleWindows()
         {
+            visibleWindows.Clear();
             EnumWindows(new DelegateEnumWindows(CallbackEnumWindow), IntPtr.Zero);
             return visibleWindows;
         }
