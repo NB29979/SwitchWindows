@@ -57,9 +57,17 @@ namespace SwitchWindows
                 StreamReader reader_ = new StreamReader(networkStream_);
                 string clientReq_ = await reader_.ReadLineAsync();
 
-                // FocusWindow予定地
-                Console.WriteLine("{0}", clientReq_);
-
+                Console.WriteLine("Selected : {0}", clientReq_);
+                IntPtr hWnd_ = Win32Api.FindWindow(null, clientReq_);
+                if(hWnd_ != IntPtr.Zero)
+                {
+                    Win32Api.SetActiveWindow(hWnd_);
+                    Win32Api.SetForegroundWindow(hWnd_);
+                }
+                else
+                {
+                    Console.WriteLine("Failed to select window");
+                }
                 _tcpClient.Close();
             }
             catch(Exception e)

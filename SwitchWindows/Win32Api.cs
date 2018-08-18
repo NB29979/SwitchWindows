@@ -23,9 +23,14 @@ namespace SwitchWindows
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool EnumWindows(DelegateEnumWindows lpEnumFunc, IntPtr lparam);
         [DllImport("User32.dll")]
-        public static extern int GetClassName(IntPtr hWnd, StringBuilder text, int length);
-        [DllImport("User32.dll")]
         private static extern bool IsWindowVisible(IntPtr hWnd);
+
+        [DllImport("User32.dll")]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        [DllImport("User32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+        [DllImport("User32.dll")]
+        public static extern IntPtr SetActiveWindow(IntPtr hWnd);
 
         private static bool CallbackEnumWindow(IntPtr _hWnd, IntPtr _lparam) {
             int windowTextLength = GetWindowTextLength(_hWnd)+1;
