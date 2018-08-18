@@ -27,12 +27,5 @@ namespace SwitchWindows
             }
 
         }
-        static void Debug(List<String> _list)
-        {
-            foreach(var e in _list){
-                Console.Write("{0},", e);
-            }
-            Console.WriteLine();
-        }
     }
 }
