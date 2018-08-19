@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace SwitchWindows
 {
@@ -57,16 +58,22 @@ namespace SwitchWindows
                 StreamReader reader_ = new StreamReader(networkStream_);
                 string clientReq_ = await reader_.ReadLineAsync();
 
-                Console.WriteLine("Selected : {0}", clientReq_);
-                IntPtr hWnd_ = Win32Api.FindWindow(null, clientReq_);
-                if(hWnd_ != IntPtr.Zero)
+                ReceivedData receivedData_ = JsonConvert.DeserializeObject<ReceivedData>(clientReq_);
+
+                if (receivedData_.type == "SelectTitle")
                 {
-                    Win32Api.SetActiveWindow(hWnd_);
-                    Win32Api.SetForegroundWindow(hWnd_);
-                }
-                else
-                {
-                    Console.WriteLine("Failed to select window");
+                    string selectedTitle_ = receivedData_.message;
+                    IntPtr hWnd_ = Win32Api.FindWindow(null, selectedTitle_);
+                    if (hWnd_ != IntPtr.Zero)
+                    {
+                        Win32Api.SetActiveWindow(hWnd_);
+                        Win32Api.SetForegroundWindow(hWnd_);
+                        Console.WriteLine("Window selected : {0}", selectedTitle_);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to select window");
+                    }
                 }
                 _tcpClient.Close();
             }
