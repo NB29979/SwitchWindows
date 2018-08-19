@@ -10,12 +10,9 @@ namespace SwitchWindows
     {
         public string type { set;  get; } //将来的にEnum
         public string message { set; get; }
+        public double absX { set; get; }
+        public double absY { set; get; }
         public double rad { set; get; }
-        public int speed { set; get; }
-
-        public void Debug()
-        {
-            Console.WriteLine("type:{0}, receivedMessage:{1}", type, message);
-        }
+        public int pointerCount { set; get; }
     }
 }

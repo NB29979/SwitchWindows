@@ -52,10 +52,33 @@ namespace SwitchWindows
                     }
                     else if (receivedData.type == "MouseEvent")
                     {
-                        cursorMoveCancelTokenSource.Cancel();
-                        if (cursorMoveCancelTokenSource.IsCancellationRequested)
-                            cursorMoveCancelTokenSource = new CancellationTokenSource();
-                        MoveMouseCursorAsync(receivedData.rad, cursorMoveCancelTokenSource.Token);
+                        if (receivedData.message == "SingleTap")
+                        {
+                            cursorMoveCancelTokenSource.Cancel();
+                        }
+                        else if (receivedData.message == "RClickDOWN")
+                        {
+                            Win32Api.mouse_event(Win32Api.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0);
+                        }
+                        else if (receivedData.message == "RClickUP")
+                        {
+                            Win32Api.mouse_event(Win32Api.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
+                        }
+                        else if (receivedData.message == "LClickDOWN")
+                        {
+                            Win32Api.mouse_event(Win32Api.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+                        }
+                        else if (receivedData.message == "LClickUP")
+                        {
+                            Win32Api.mouse_event(Win32Api.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+                        }
+                        else if (receivedData.message == "MoveCursor")
+                        {
+                            cursorMoveCancelTokenSource.Cancel();
+                            if (cursorMoveCancelTokenSource.IsCancellationRequested)
+                                cursorMoveCancelTokenSource = new CancellationTokenSource();
+                            MoveMouseCursorAsync(receivedData.rad, receivedData.absX, receivedData.absY, cursorMoveCancelTokenSource.Token);
+                        }
                     }
                 }
                 catch (Exception e)
@@ -96,17 +119,20 @@ namespace SwitchWindows
                 Console.WriteLine("Failed to select window");
             }
         }
-        private async Task MoveMouseCursorAsync(double _rad, CancellationToken _token)
+        private async Task MoveMouseCursorAsync(double _rad, double _absX, double _absY, CancellationToken _token)
         {
-            Console.WriteLine(_token.IsCancellationRequested);
-            for(int i = 0; i < 1000; ++i)
+            double speedX_ = Math.Pow(2,_absX/60);
+            double speedY_ = Math.Pow(2,_absY/60);
+
+            for(int i = 0; i < 15; ++i)
             {
                 if (_token.IsCancellationRequested) return;
                 Win32Api.POINT point_;
                 Win32Api.GetCursorPos(out point_);
 
-                Win32Api.SetCursorPos((int)(point_.X+5*Math.Cos(_rad)), (int)(point_.Y+5*Math.Sin(_rad)));
-                await Task.Delay(5);
+                Win32Api.SetCursorPos((int)(point_.X+speedX_*Math.Cos(_rad)),
+                    (int)(point_.Y+speedY_*Math.Sin(_rad)));
+                await Task.Delay(10);
             }
         }
     }

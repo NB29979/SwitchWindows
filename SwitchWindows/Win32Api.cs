@@ -10,6 +10,10 @@ namespace SwitchWindows
 {
     class Win32Api
     {
+        public const int MOUSEEVENTF_LEFTDOWN = 0x0002;
+        public const int MOUSEEVENTF_LEFTUP = 0x0004;
+        public const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
+        public const int MOUSEEVENTF_RIGHTUP = 0x0010;
         private delegate bool DelegateEnumWindows(IntPtr hWnd, IntPtr lparam);
         private static List<String> visibleWindows = new List<string>();
 
@@ -34,19 +38,14 @@ namespace SwitchWindows
         public static extern IntPtr SetActiveWindow(IntPtr hWnd);
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
-            public int X;
-            public int Y;
-            //public static implicit operator Point(POINT point)
-            //{
-            //    return new Point(point.X, point.Y);
-            //}
-        }
+        public struct POINT { public int X; public int Y; }
         [DllImport("User32.dll")]
         public static extern bool GetCursorPos(out POINT lpPoint);
         [DllImport("User32.dll")]
         public static extern bool SetCursorPos(int x, int y);
+
+        [DllImport("User32.dll")]
+        public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
 
         private static bool CallbackEnumWindow(IntPtr _hWnd, IntPtr _lparam) {
             int windowTextLength = GetWindowTextLength(_hWnd)+1;
