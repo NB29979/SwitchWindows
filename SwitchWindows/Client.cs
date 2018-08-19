@@ -24,7 +24,7 @@ namespace SwitchWindows
             try
             {
                 TcpClient sender = new TcpClient();
-                iPAddress = IPAddress.Parse("");
+                iPAddress = IPAddress.Parse("192.168.1.16");
                 await sender.ConnectAsync(iPAddress, 10080);
 
                 NetworkStream networkStream_ = sender.GetStream();

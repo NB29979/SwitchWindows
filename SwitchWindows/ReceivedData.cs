@@ -8,9 +8,9 @@ namespace SwitchWindows
 {
     class ReceivedData
     {
-        public string type { set;  get; }
+        public string type { set;  get; } //将来的にEnum
         public string message { set; get; }
-        public int direction { set; get; }
+        public double rad { set; get; }
         public int speed { set; get; }
 
         public void Debug()

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace SwitchWindows
 {
@@ -31,6 +32,21 @@ namespace SwitchWindows
         public static extern bool SetForegroundWindow(IntPtr hWnd);
         [DllImport("User32.dll")]
         public static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+            //public static implicit operator Point(POINT point)
+            //{
+            //    return new Point(point.X, point.Y);
+            //}
+        }
+        [DllImport("User32.dll")]
+        public static extern bool GetCursorPos(out POINT lpPoint);
+        [DllImport("User32.dll")]
+        public static extern bool SetCursorPos(int x, int y);
 
         private static bool CallbackEnumWindow(IntPtr _hWnd, IntPtr _lparam) {
             int windowTextLength = GetWindowTextLength(_hWnd)+1;
