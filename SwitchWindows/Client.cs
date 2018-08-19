@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace SwitchWindows
 {
@@ -23,7 +24,7 @@ namespace SwitchWindows
             try
             {
                 TcpClient sender = new TcpClient();
-                iPAddress = IPAddress.Parse("192.168.1.16");
+                iPAddress = IPAddress.Parse("");
                 await sender.ConnectAsync(iPAddress, 10080);
 
                 NetworkStream networkStream_ = sender.GetStream();
@@ -52,9 +53,8 @@ namespace SwitchWindows
                 if (newVisibleWindows_.Except(oldVisibleWindows_).ToList().Count != 0 ||
                     oldVisibleWindows_.Except(newVisibleWindows_).ToList().Count != 0)
                 {
-                    Console.WriteLine("Changed");
-
-                    await SendDataAsync(Encode(newVisibleWindows_));
+                    Console.WriteLine("Window List was Changed");
+                    await SendDataAsync(JsonConvert.SerializeObject(newVisibleWindows_));
                    
                     Console.WriteLine("WindowList was sent to device");
                     oldVisibleWindows_ = newVisibleWindows_;
