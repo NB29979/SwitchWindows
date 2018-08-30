@@ -38,25 +38,29 @@ namespace SwitchWindows
         }
         private void ControlMouse()
         {
-            if (receivedData.message == "RClickDOWN")
+            switch (receivedData.message)
             {
-                Win32Api.mouse_event(Win32Api.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0);
-            }
-            else if (receivedData.message == "RClickUP")
-            {
-                Win32Api.mouse_event(Win32Api.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
-            }
-            else if (receivedData.message == "LClickDOWN")
-            {
-                Win32Api.mouse_event(Win32Api.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-            }
-            else if (receivedData.message == "LClickUP")
-            {
-                Win32Api.mouse_event(Win32Api.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-            }
-            else if (receivedData.message == "MoveCursor")
-            {
-                MoveMouseCursor(receivedData.variationX, receivedData.variationY);
+                case "RClickDOWN":
+                    Win32Api.mouse_event(Win32Api.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0);
+                    break;
+                case "RClickUP":
+                    Win32Api.mouse_event(Win32Api.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
+                    break;
+                case "LClickDOWN":
+                    Win32Api.mouse_event(Win32Api.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+                    break;
+                case "LClickUP":
+                    Win32Api.mouse_event(Win32Api.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+                    break;
+                case "MoveCursor":
+                    MoveMouseCursor(receivedData.variationX, receivedData.variationY);
+                    break;
+                case "ScrollWindow":
+                    Win32Api.mouse_event(Win32Api.MOUSEEVENTF_WHEEL, 0, 0, (int)receivedData.variationY, 0);
+                    break;
+                case "HScrollWindow":
+                    Win32Api.mouse_event(Win32Api.MOUSEEVENTF_HWHEEL, 0, 0, (int)receivedData.variationX, 0);
+                    break;
             }
         }
         private void MoveMouseCursor(double _variationX, double _variationY)

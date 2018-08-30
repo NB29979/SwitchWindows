@@ -14,6 +14,8 @@ namespace SwitchWindows
         public const int MOUSEEVENTF_LEFTUP = 0x0004;
         public const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
         public const int MOUSEEVENTF_RIGHTUP = 0x0010;
+        public const int MOUSEEVENTF_WHEEL = 0x0800;
+        public const int MOUSEEVENTF_HWHEEL = 0x01000;
         private delegate bool DelegateEnumWindows(IntPtr hWnd, IntPtr lparam);
         private static List<String> visibleWindows = new List<string>();
 
@@ -59,10 +61,6 @@ namespace SwitchWindows
             return true;
         }
 
-        public void DispAllWindows()
-        {
-            EnumWindows(new DelegateEnumWindows(CallbackEnumWindow), IntPtr.Zero);
-        }
         public static List<String> GetVisibleWindows()
         {
             visibleWindows.Clear();
