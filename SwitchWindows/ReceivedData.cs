@@ -10,8 +10,8 @@ namespace SwitchWindows
     {
         public string type { set;  get; } //将来的にEnum
         public string message { set; get; }
-        public double absX { set; get; }
-        public double absY { set; get; }
+        public double variationX { set; get; }
+        public double variationY { set; get; }
         public double rad { set; get; }
         public int pointerCount { set; get; }
     }
