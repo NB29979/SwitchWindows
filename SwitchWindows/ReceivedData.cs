@@ -12,7 +12,6 @@ namespace SwitchWindows
         public string message { set; get; }
         public double variationX { set; get; }
         public double variationY { set; get; }
-        public double rad { set; get; }
         public int pointerCount { set; get; }
     }
 }
