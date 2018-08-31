@@ -13,7 +13,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -178,6 +178,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceivedData.cs" />
     <Compile Include="Win32Api.cs" />
+    <Compile Include="WindowRowData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

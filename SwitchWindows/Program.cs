@@ -32,21 +32,22 @@ namespace SwitchWindows
                 Console.WriteLine("Window watching...");
                 Task.Factory.StartNew(() => 
                 {
-                    List<string> oldVisibleWindows_ = new List<string>();
-                    List<string> newVisibleWindows_ = new List<string>();
+                    List<WindowRowData> oldVisibleWindows_ = new List<WindowRowData>();
+                    List<WindowRowData> newVisibleWindows_ = new List<WindowRowData>();
+
+                    if (!cancellationToken.IsCancellationRequested) {
+                        newVisibleWindows_ = Win32Api.GetVisibleWindows().Distinct().ToList();
+                        _session.Send(JsonConvert.SerializeObject(newVisibleWindows_));
+                    }
 
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         newVisibleWindows_ = Win32Api.GetVisibleWindows().Distinct().ToList();
 
-                        // 新しくウインドウが開かれた場合と
-                        // 既存のウインドウが閉じられた場合にウインドウ一覧を送る
-                        if (newVisibleWindows_.Except(oldVisibleWindows_).ToList().Count != 0 ||
-                            oldVisibleWindows_.Except(newVisibleWindows_).ToList().Count != 0)
+                        if(!newVisibleWindows_.SequenceEqual(oldVisibleWindows_, new WindowRowDataComparer()))
                         {
-                            Console.WriteLine("Window List was Changed");
                             _session.Send(JsonConvert.SerializeObject(newVisibleWindows_));
-
+                            Console.WriteLine("Window list sent to device");
                             oldVisibleWindows_ = newVisibleWindows_;
                         }
                     }
