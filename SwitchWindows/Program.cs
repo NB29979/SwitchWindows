@@ -41,11 +41,12 @@ namespace SwitchWindows
 
                         if(!newVisibleWindows_.SequenceEqual(oldVisibleWindows_, new WindowRowDataComparer()))
                         {
+                            oldVisibleWindows_ = newVisibleWindows_;
+
                             IconExtractor.ExtractIcons(newVisibleWindows_);
                             _session.Send(JsonConvert.SerializeObject(newVisibleWindows_));
 
                             Console.WriteLine("Window list sent to device");
-                            oldVisibleWindows_ = newVisibleWindows_;
                         }
                     }
                 });
