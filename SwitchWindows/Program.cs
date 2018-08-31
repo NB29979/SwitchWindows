@@ -36,13 +36,13 @@ namespace SwitchWindows
                     List<WindowRowData> newVisibleWindows_ = new List<WindowRowData>();
 
                     if (!cancellationToken.IsCancellationRequested) {
-                        newVisibleWindows_ = Win32Api.GetVisibleWindows().Distinct().ToList();
+                        newVisibleWindows_ = APIHub.GetVisibleWindows().Distinct().ToList();
                         _session.Send(JsonConvert.SerializeObject(newVisibleWindows_));
                     }
 
                     while (!cancellationToken.IsCancellationRequested)
                     {
-                        newVisibleWindows_ = Win32Api.GetVisibleWindows().Distinct().ToList();
+                        newVisibleWindows_ = APIHub.GetVisibleWindows().Distinct().ToList();
 
                         if(!newVisibleWindows_.SequenceEqual(oldVisibleWindows_, new WindowRowDataComparer()))
                         {
