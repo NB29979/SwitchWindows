@@ -35,18 +35,15 @@ namespace SwitchWindows
                     List<WindowRowData> oldVisibleWindows_ = new List<WindowRowData>();
                     List<WindowRowData> newVisibleWindows_ = new List<WindowRowData>();
 
-                    if (!cancellationToken.IsCancellationRequested) {
-                        newVisibleWindows_ = APIHub.GetVisibleWindows().Distinct().ToList();
-                        _session.Send(JsonConvert.SerializeObject(newVisibleWindows_));
-                    }
-
                     while (!cancellationToken.IsCancellationRequested)
                     {
-                        newVisibleWindows_ = APIHub.GetVisibleWindows().Distinct().ToList();
+                        newVisibleWindows_ = WindowInformationProvider.GetVisibleWindows().Distinct().ToList();
 
                         if(!newVisibleWindows_.SequenceEqual(oldVisibleWindows_, new WindowRowDataComparer()))
                         {
+                            IconExtractor.ExtractIcons(newVisibleWindows_);
                             _session.Send(JsonConvert.SerializeObject(newVisibleWindows_));
+
                             Console.WriteLine("Window list sent to device");
                             oldVisibleWindows_ = newVisibleWindows_;
                         }

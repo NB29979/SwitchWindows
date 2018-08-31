@@ -9,7 +9,7 @@ using System.Data;
 
 namespace SwitchWindows
 {
-    class APIHub
+    class WindowInformationProvider
     {
         private const int PROCESS_ALL_ACCESS = 0x1F0FFF;
         private const int LIST_MODULES_ALL = 0x03;
